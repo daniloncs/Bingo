@@ -12,8 +12,27 @@
       text-align: center;
     }
 
+    .main-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    #premios {
+      width: 260px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      text-align: left;
+    }
+
     .bingo-container {
-      display: inline-block;
+      flex: 1;
+      min-width: 300px;
+      max-width: 700px;
       background-color: #fff;
       padding: 20px;
       border-radius: 12px;
@@ -56,9 +75,12 @@
       background-color: yellow;
     }
 
+    .botao-container {
+      margin-top: 30px;
+    }
+
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 16px;
       cursor: pointer;
       border: none;
@@ -71,36 +93,30 @@
     button:hover {
       background-color: #45a049;
     }
-
-    #premios {
-      font-size: 18px;
-      margin-bottom: 30px;
-      background-color: #fff;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: inline-block;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
   </style>
 </head>
 <body>
 
-  <div id="premios">Carregando prêmios...</div>
-
   <h1>Cartela de Bingo</h1>
 
-  <div id="bingo" class="bingo-container">
-    <div class="bingo-row"><div class="bingo-letter">B</div></div>
-    <div class="bingo-row"><div class="bingo-letter">I</div></div>
-    <div class="bingo-row"><div class="bingo-letter">N</div></div>
-    <div class="bingo-row"><div class="bingo-letter">G</div></div>
-    <div class="bingo-row"><div class="bingo-letter">O</div></div>
+  <div class="main-container">
+    <div id="premios">Carregando prêmios...</div>
+
+    <div id="bingo" class="bingo-container">
+      <div class="bingo-row"><div class="bingo-letter">B</div></div>
+      <div class="bingo-row"><div class="bingo-letter">I</div></div>
+      <div class="bingo-row"><div class="bingo-letter">N</div></div>
+      <div class="bingo-row"><div class="bingo-letter">G</div></div>
+      <div class="bingo-row"><div class="bingo-letter">O</div></div>
+    </div>
   </div>
 
-  <button onclick="salvarImagem()">Salvar Sorteio</button>
+  <div class="botao-container">
+    <button onclick="salvarImagem()">Salvar Sorteio</button>
+  </div>
 
   <script>
-    // Gerar bolas de bingo
+    // Criar círculos
     const rows = document.querySelectorAll('.bingo-row');
     const ranges = [
       [1, 15], [16, 30], [31, 45], [46, 60], [61, 75]
@@ -119,7 +135,7 @@
       }
     });
 
-    // Salvar como imagem
+    // Salvar imagem
     function salvarImagem() {
       const element = document.getElementById('bingo');
       html2canvas(element).then(canvas => {
@@ -130,7 +146,7 @@
       });
     }
 
-    // Carregar prêmios a partir do arquivo baseado no nome do HTML
+    // Ler nome do arquivo e buscar série
     function getCurrentFileName() {
       const path = window.location.pathname;
       return path.substring(path.lastIndexOf('/') + 1);
@@ -169,7 +185,7 @@
             if (quadra) partes.push(quadra[0].trim());
             if (terno) partes.push(terno[0].trim());
 
-            premiosDiv.innerHTML = `<strong>Série ${serieAtual}</strong><br>${partes.join('<br>')}`;
+            premiosDiv.innerHTML = `<strong>Série ${serieAtual}</strong><br><br>${partes.join('<br><br>')}`;
           } else {
             premiosDiv.textContent = `Prêmio para a Série ${serieAtual} não encontrado.`;
           }
