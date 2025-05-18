@@ -12,12 +12,30 @@
       text-align: center;
     }
 
-    .bingo-container {
+    .container {
       display: inline-block;
+    }
+
+    #premios {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto 20px auto;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .bingo-container {
+      width: 100%;
+      max-width: 700px;
       background-color: #fff;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 0 auto;
     }
 
     .bingo-row {
@@ -56,13 +74,19 @@
       background-color: yellow;
     }
 
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
+    .footer {
+      margin-top: 30px;
       font-size: 16px;
+      color: #333;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
       cursor: pointer;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       background-color: #4CAF50;
       color: white;
       transition: background-color 0.3s;
@@ -71,36 +95,28 @@
     button:hover {
       background-color: #45a049;
     }
-
-    #premios {
-      font-size: 18px;
-      margin-bottom: 30px;
-      background-color: #fff;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: inline-block;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
   </style>
 </head>
 <body>
 
-  <div id="premios">Carregando prêmios...</div>
+  <div class="container">
+    <div id="premios">Carregando prêmios...</div>
 
-  <h1>Cartela de Bingo</h1>
+    <div id="bingo" class="bingo-container">
+      <div class="bingo-row"><div class="bingo-letter">B</div></div>
+      <div class="bingo-row"><div class="bingo-letter">I</div></div>
+      <div class="bingo-row"><div class="bingo-letter">N</div></div>
+      <div class="bingo-row"><div class="bingo-letter">G</div></div>
+      <div class="bingo-row"><div class="bingo-letter">O</div></div>
+    </div>
 
-  <div id="bingo" class="bingo-container">
-    <div class="bingo-row"><div class="bingo-letter">B</div></div>
-    <div class="bingo-row"><div class="bingo-letter">I</div></div>
-    <div class="bingo-row"><div class="bingo-letter">N</div></div>
-    <div class="bingo-row"><div class="bingo-letter">G</div></div>
-    <div class="bingo-row"><div class="bingo-letter">O</div></div>
+    <div class="footer">
+      <p><strong>E.E. Professor Estephano Orlando Paulovski</strong></p>
+      <button onclick="salvarImagem()">Salvar Sorteio</button>
+    </div>
   </div>
 
-  <button onclick="salvarImagem()">Salvar Sorteio</button>
-
   <script>
-    // Gerar bolas de bingo
     const rows = document.querySelectorAll('.bingo-row');
     const ranges = [
       [1, 15], [16, 30], [31, 45], [46, 60], [61, 75]
@@ -119,7 +135,6 @@
       }
     });
 
-    // Salvar como imagem
     function salvarImagem() {
       const element = document.getElementById('bingo');
       html2canvas(element).then(canvas => {
@@ -130,7 +145,6 @@
       });
     }
 
-    // Carregar prêmios a partir do arquivo baseado no nome do HTML
     function getCurrentFileName() {
       const path = window.location.pathname;
       return path.substring(path.lastIndexOf('/') + 1);
@@ -169,7 +183,7 @@
             if (quadra) partes.push(quadra[0].trim());
             if (terno) partes.push(terno[0].trim());
 
-            premiosDiv.innerHTML = `<strong>Série ${serieAtual}</strong><br>${partes.join('<br>')}`;
+            premiosDiv.innerHTML = `<strong>Série ${serieAtual}</strong><br><br>${partes.join('<br><br>')}`;
           } else {
             premiosDiv.textContent = `Prêmio para a Série ${serieAtual} não encontrado.`;
           }
