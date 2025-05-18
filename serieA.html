@@ -113,19 +113,49 @@
   </div>
 
   <script>
-    // Carregar e mostrar o premios.txt no topo
-    fetch('premios.txt')
-      .then(response => {
-        if (!response.ok) throw new Error('Não foi possível carregar o arquivo.');
-        return response.text();
-      })
-      .then(text => {
-        document.getElementById('premios').textContent = text;
-      })
-      .catch(err => {
-        document.getElementById('premios').textContent = 'Erro ao carregar prêmios.';
-        console.error(err);
-      });
+    // Função para pegar o nome do arquivo atual, ex: serieA.html
+    function getCurrentFileName() {
+      const path = window.location.pathname;
+      return path.substring(path.lastIndexOf('/') + 1);
+    }
+
+    // Pegar a letra da série a partir do nome do arquivo (ex: 'serieA.html' -> 'A')
+    function getSerieFromFileName(fileName) {
+      const match = fileName.match(/serie([A-Z])\.html/i);
+      if (match && match[1]) {
+        return match[1].toUpperCase();
+      }
+      return null;
+    }
+
+    const premiosDiv = document.getElementById('premios');
+    const arquivoAtual = getCurrentFileName();
+    const serieAtual = getSerieFromFileName(arquivoAtual);
+
+    if (!serieAtual) {
+      premiosDiv.textContent = 'Não foi possível identificar a série.';
+    } else {
+      fetch('premios.txt')
+        .then(response => {
+          if (!response.ok) throw new Error('Não foi possível carregar o arquivo.');
+          return response.text();
+        })
+        .then(text => {
+          // Dividir o arquivo em linhas
+          const linhas = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+          // Procurar a linha que começa com "Série: X;"
+          const premioLinha = linhas.find(linha => linha.toUpperCase().startsWith(`SÉRIE: ${serieAtual};`));
+          if (premioLinha) {
+            premiosDiv.textContent = premioLinha;
+          } else {
+            premiosDiv.textContent = `Prêmio para a Série ${serieAtual} não encontrado.`;
+          }
+        })
+        .catch(err => {
+          premiosDiv.textContent = 'Erro ao carregar prêmios.';
+          console.error(err);
+        });
+    }
 
     // Gerar números na cartela
     const rows = document.querySelectorAll('.bingo-row');
