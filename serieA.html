@@ -40,9 +40,11 @@
 
     .bingo-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 20px;
       justify-content: center;
+      margin-bottom: 15px;
+      gap: 5px;
     }
 
     .bingo-letter {
@@ -54,21 +56,21 @@
     }
 
     .circle {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       background-color: white;
       border: 2px solid #333;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 4px;
       font-size: 18px;
       font-weight: bold;
       color: #000;
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
 
     .circle.marked {
       background-color: yellow;
