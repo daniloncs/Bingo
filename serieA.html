@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Cartela de Bingo</title>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
@@ -10,6 +10,21 @@
       background-color: #f0f0f0;
       padding: 40px;
       text-align: center;
+    }
+
+    #premios {
+      white-space: pre-wrap;
+      text-align: left;
+      background-color: #fff;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+      color: #333;
     }
 
     .bingo-container {
@@ -74,7 +89,9 @@
   </style>
 </head>
 <body>
-<button onclick="salvarImagem()">Salvar Sorteio</button>
+  <div id="premios">Carregando prêmios...</div>
+
+  <button onclick="salvarImagem()">Salvar Sorteio</button>
   <h1>Cartela de Bingo</h1>
 
   <div id="bingo" class="bingo-container">
@@ -95,9 +112,22 @@
     </div>
   </div>
 
-  
-
   <script>
+    // Carregar e mostrar o premios.txt no topo
+    fetch('premios.txt')
+      .then(response => {
+        if (!response.ok) throw new Error('Não foi possível carregar o arquivo.');
+        return response.text();
+      })
+      .then(text => {
+        document.getElementById('premios').textContent = text;
+      })
+      .catch(err => {
+        document.getElementById('premios').textContent = 'Erro ao carregar prêmios.';
+        console.error(err);
+      });
+
+    // Gerar números na cartela
     const rows = document.querySelectorAll('.bingo-row');
     const ranges = [
       [1, 15],   // B
@@ -120,6 +150,7 @@
       }
     });
 
+    // Salvar a imagem da cartela
     function salvarImagem() {
       const element = document.getElementById('bingo');
       html2canvas(element).then(canvas => {
