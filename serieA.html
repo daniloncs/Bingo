@@ -167,23 +167,19 @@
       .then(text => {
         const linhas = text.split('\n');
         const linhaPremio = linhas.find(l => l.includes(`Série: ${serie.toUpperCase()}`));
+
         if (linhaPremio) {
-          const partes = linhaPremio.split(';').map(p => p.trim());
+          const premioRaw = linhaPremio.split('Prêmio:')[1] || '';
+          const quinaMatch = premioRaw.match(/Quina:\s*([^\.]+)\./i);
+          const quadraMatch = premioRaw.match(/Quadra:\s*([^\.]+)\./i);
+          const ternoMatch = premioRaw.match(/Terno:\s*([^\.]+)\./i);
 
-          const serieTexto = partes[0].replace('Série:', '').trim();
+          let html = `<h2>Série: ${serie.toUpperCase()}</h2>`;
+          if (quinaMatch) html += `<p>Quina: ${quinaMatch[1].trim()}.</p>`;
+          if (quadraMatch) html += `<p>Quadra: ${quadraMatch[1].trim()}.</p>`;
+          if (ternoMatch) html += `<p>Terno: ${ternoMatch[1].trim()}.</p>`;
 
-          let quina = partes.find(p => p.toLowerCase().startsWith('quina:'));
-          let quadra = partes.find(p => p.toLowerCase().startsWith('quadra:'));
-          let terno = partes.find(p => p.toLowerCase().startsWith('terno:'));
-
-          quina = quina ? `<p>${quina.replace(/quina:/i, '').trim()}</p>` : '';
-          quadra = quadra ? `<p>${quadra.replace(/quadra:/i, '').trim()}</p>` : '';
-          terno = terno ? `<p>${terno.replace(/terno:/i, '').trim()}</p>` : '';
-
-          document.getElementById('premios').innerHTML = `
-            <h2>Série: ${serieTexto}</h2>
-            ${quina}${quadra}${terno}
-          `;
+          document.getElementById('premios').innerHTML = html;
         } else {
           document.getElementById('premios').innerHTML = '<h2>Prêmios não encontrados.</h2>';
         }
