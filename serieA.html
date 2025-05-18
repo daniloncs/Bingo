@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cartela de Bingo</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .bingo-container {
+      display: inline-block;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .bingo-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .bingo-letter {
+      font-size: 32px;
+      font-weight: bold;
+      width: 60px;
+      text-align: center;
+      color: #333;
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      background-color: white;
+      border: 2px solid #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .circle.marked {
+      background-color: yellow;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+<button onclick="salvarImagem()">Salvar Sorteio</button>
+  <h1>Cartela de Bingo</h1>
+
+  <div id="bingo" class="bingo-container">
+    <div class="bingo-row">
+      <div class="bingo-letter">B</div>
+    </div>
+    <div class="bingo-row">
+      <div class="bingo-letter">I</div>
+    </div>
+    <div class="bingo-row">
+      <div class="bingo-letter">N</div>
+    </div>
+    <div class="bingo-row">
+      <div class="bingo-letter">G</div>
+    </div>
+    <div class="bingo-row">
+      <div class="bingo-letter">O</div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    const rows = document.querySelectorAll('.bingo-row');
+    const ranges = [
+      [1, 15],   // B
+      [16, 30],  // I
+      [31, 45],  // N
+      [46, 60],  // G
+      [61, 75],  // O
+    ];
+
+    rows.forEach((row, i) => {
+      const [start, end] = ranges[i];
+      for (let n = start; n <= end; n++) {
+        const div = document.createElement('div');
+        div.className = 'circle';
+        div.textContent = n;
+        div.addEventListener('click', () => {
+          div.classList.toggle('marked');
+        });
+        row.appendChild(div);
+      }
+    });
+
+    function salvarImagem() {
+      const element = document.getElementById('bingo');
+      html2canvas(element).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'cartela-bingo.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
